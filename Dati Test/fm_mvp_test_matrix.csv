@@ -1,0 +1,42 @@
+Rule_ID,Trap,Scenario_Type,Test_Scenario,Evidence_Required,Expected_AI_Finding,Suggested_Action
+R01,Monthly base fee mismatch,Negative,"Invoice shows base fee 18,450 instead of 18,000",Contract fixed fee,Amount mismatch > tolerance,Block payment; request corrected invoice
+R02,Monthly base fee mismatch,Positive,"Invoice shows base fee 18,000 exactly as contract",Contract fixed fee,No exception,Pass
+R03,Hourly rate mismatch,Negative,10 extra hours billed at 29 instead of 26,Contract hourly rate,Unit price mismatch,Reject line; ask supporting amendment
+R04,Hourly rate mismatch,Positive,10 extra hours billed at 26 as agreed,Contract hourly rate,No exception,Pass
+R05,Unauthorized extra service,Negative,Deep sanitization billed without approved request or PO,Scope + approvals,No authorization found,Block line item
+R06,Unauthorized extra service,Positive,Deep sanitization billed with approved emergency PO attached,Scope + approvals,Valid exception documented,Pass with evidence
+R07,Duplicate billing,Negative,Urgent intervention billed once as call-out and once as extra labor package,Line similarity + ticket match,Potential duplicate service,Review and block duplicate
+R08,Duplicate billing,Positive,Call-out fee and separate authorized follow-up hours refer to different tickets,Ticket IDs + dates,Distinct services proven,Pass
+R09,Split billing,Negative,One 12-hour extra job split into 3 small invoice lines with same date/site,Clustering by site/date/text,Artificial fragmentation suspected,Manual review
+R10,Split billing,Positive,Three small lines correspond to three distinct sites and work orders,Site/work order cross-check,Legitimate separation,Pass
+R11,Early indexation,Negative,4% uplift applied on March invoice though allowed only from January following year,Indexation clause + invoice date,Timing breach,Reject uplift
+R12,Early indexation,Positive,Annual uplift first appears on January invoice in allowed year,Indexation clause + invoice date,Timing compliant,Pass
+R13,Wrong service period,Negative,February work rebilled in March with no carry-over approval,Service period + ticket close date,Period mismatch,Review accrual / reject duplicate period
+R14,Wrong service period,Positive,Late February ticket correctly billed in March with approved accrual note,Accrual note + ticket close date,Documented carry-over,Pass with note
+R15,Missed penalty not deducted,Negative,Invoice note admits one missed service day but no 500 deduction appears,Invoice notes + SLA clause,Missing credit,Issue dispute / request credit note
+R16,Missed penalty not deducted,Positive,Missed service day declared and 500 deducted in same invoice,Invoice notes + totals,Penalty applied correctly,Pass
+R17,Penalty under-applied,Negative,"Two missed days but only 500 deducted instead of 1,000",SLA formula + incident count,Under-applied penalty,Request corrected deduction
+R18,Penalty under-applied,Positive,"Two missed days and 1,000 deducted as agreed",Incident count + totals,Penalty logic correct,Pass
+R19,Missing authorization,Negative,"Extra cleaning line exists but no PO, no email approval, no work order",Approval repository,Missing evidence,Block pending evidence
+R20,Missing authorization,Positive,Extra cleaning supported by PO and manager approval,Approval repository,Evidence complete,Pass
+R21,Ambiguous description,Negative,Line says miscellaneous support services without site or unit details,Line text quality,Cannot map to contract,Manual review
+R22,Ambiguous description,Positive,Line states extra cleaning 8h site 04 ticket 7712,Line text quality,Sufficient mapping info,Pass
+R23,Mixed bundled charges,Negative,"One line bundles labor, materials and call-out into one lump sum",Line structure,Non-auditable bundled charge,Request breakdown
+R24,Mixed bundled charges,Positive,"Labor, materials and call-out are separated with unit rates",Line structure,Auditable breakdown,Pass
+R25,Minimum charge abuse,Negative,Vendor bills 4-hour minimum for 45-minute intervention not in contract,Commercial rules,Unjustified minimum charge,Reject excess
+R26,Minimum charge abuse,Positive,2-hour minimum billed exactly as contract amendment states,Commercial rules,Minimum charge contractually valid,Pass
+R27,Travel/setup time added,Negative,Travel and setup time billed separately though contract includes mobilization,Contract scope,Non-billable component charged,Reject line
+R28,Travel/setup time added,Positive,Travel billed only where explicit remote-site exception exists,Contract exception + site,Exception valid,Pass with evidence
+R29,Wrong CPI base,Negative,Index calculated from wrong base month or wrong CPI series,Index formula,Index formula mismatch,Reject uplift
+R30,Wrong CPI base,Positive,Index follows agreed CPI series and base month exactly,Index formula,Formula compliant,Pass
+R31,Wrong scope uplift,Negative,Inflation applied to emergency call-out fee though clause excludes pass-through items,Indexed items list,Excluded item uplifted,Reject uplifted component
+R32,Wrong scope uplift,Positive,Inflation applied only to eligible recurring fee components,Indexed items list,Scope compliant,Pass
+R33,VAT inconsistency,Negative,VAT computed on gross total with wrong rate for jurisdiction,Tax rules + math,VAT mismatch,Manual tax review
+R34,VAT inconsistency,Positive,VAT rate and taxable base reconcile perfectly,Tax rules + math,VAT compliant,Pass
+R35,Decimal/rounding issue,Negative,Minor delta caused by line rounding exceeds tolerance threshold,Arithmetic check,Rounding outside tolerance,Review / adjust tolerance
+R36,Decimal/rounding issue,Positive,Rounding delta falls within defined tolerance,Arithmetic check,Within tolerance,Pass
+R37,Wrong site/entity,Negative,Invoice addressed to wrong legal entity or includes non-contracted site,Vendor master + site list,Master data mismatch,Block payment
+R38,Wrong site/entity,Positive,Invoice entity and all sites match contract register,Vendor master + site list,Master data compliant,Pass
+R39,Semantic Camouflage,Negative,"Intervento straordinario per igienizzazione profonda e ripristino locali post-allagamento. Eseguite n. 4 ore alla tariffa di 26/h. Totale riga 104.",Scope + approvals,No authorization found,Review + block
+R40,OCR and Typo Mess,Negative,"Segnaliamo r!tardo d1 gg 2 sulla chiamata d'emergenza causa traff!co. Totale fattura 18.000 (nessuna decurtaz. applicata).",SLA rules,Penalty underapplied,Block payment
+R41,Bundled Overbilling,Negative,"Canone servizi integrati Facility Management mese corrente comprensivo di n. 10 ore extra autorizzate. Totale 18500.",Base fee + Extra rates,Amount mismatch,Review + block
